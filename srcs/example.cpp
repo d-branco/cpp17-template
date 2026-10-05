@@ -1,20 +1,18 @@
-#include "factorial.hpp"
+#include "example.hpp"
 
 long long factorial(int n)
 {
     if (n < 0)
-    {
-        return (-1); // Error case for negative input
-    }
+        return (-1);
     long long result = 1;
     for (int i = 1; i <= n; ++i)
-    {
         result *= i;
-    }
     return (result);
 }
 
 #ifdef TESTING
+# include "doctest.h"
+
 TEST_CASE("factorial function")
 {
     SUBCASE("factorial of negative numbers")

@@ -133,7 +133,7 @@ fclean: clean
 re: fclean all
 	@echo "$(GRAY)redone$(RESET)"
 
-.PHONY: all clean fclean re clang-check valgrind test run debug asan doctest exe gprof time style check-style fix-style format check-guards clangd init
+.PHONY: all clean fclean re clang-check valgrind test run debug asan doctest exe gprof time style check-style fix-style format check-guards clangd init ctest
 
 ####################################################################### Format #
 .clang-format:
@@ -159,8 +159,8 @@ re: fclean all
 	AlignEscapedNewlinesLeft: true\n\
 	AllowAllConstructorInitializersOnNextLine: false\n\
 	AllowAllParametersOfDeclarationOnNextLine: false\n\
-	AllowShortBlocksOnASingleLine: false\n\
-	AllowShortIfStatementsOnASingleLine: false\n\
+	AllowShortBlocksOnASingleLine: true\n\
+	AllowShortIfStatementsOnASingleLine: Never\n\
 	AllowShortFunctionsOnASingleLine: None\n\
 	AlwaysBreakAfterReturnType: None\n\
 	AlwaysBreakBeforeMultilineStrings: false\n\
@@ -210,6 +210,7 @@ format: check-guards .clang-format
 	Checks: |\n\
 	  readability-*,\n\
 	  -readability-magic-numbers,\n\
+	  -readability-braces-around-statements,\n\
 	  bugprone-*,\n\
 	  performance-*,\n\
 	  clang-analyzer-*,\n\
@@ -397,6 +398,8 @@ test: format $(NAME) $(TEST_NAME) $(DEBUG_NAME) $(ASAN_NAME)
 	echo "$(RESET)$(GRAY)Return value:$(RESET) VALGRIND: $$RET3"	; \
 	echo "$(RESET)$(GRAY)Return value:$(RESET)     ASAN: $$RET4"	; \
 	exit $$((RET1 + RET2 + RET3 + RET4))
+
+ctest: fclean test
 
 doctest: format $(TEST_NAME)
 	@\

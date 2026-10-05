@@ -1,7 +1,11 @@
-#include "factorial.hpp"
-#include "header.hpp"
+#include "Harl.hpp"
+#include "example.hpp"
+#include <cstdlib>
+#include <iostream>
 
 #ifndef TESTING
+# define DOCTEST_CONFIG_NO_POSIX_SIGNALS
+
 int main()
 {
     Harl::debug("level  1");
@@ -9,11 +13,7 @@ int main()
     Harl::warning("level  3");
     Harl::error("level  4");
 
-    std::cout << "Factorial examples:\n";
-    std::cout << "5! = " << factorial(5) << "\n";
-    std::cout << "7! = " << factorial(7) << "\n";
-
-    std::cout << "end of main()\n";
+    std::cout << "6! = " << factorial(6) << "\n";
     return (EXIT_SUCCESS);
 }
 
