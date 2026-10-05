@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+commit_msg_file="${1:-}"
+
+if [ -z "$commit_msg_file" ] || [ ! -f "$commit_msg_file" ]; then
+    if git rev-parse --git-dir > /dev/null 2>&1; then
+        commit_msg="$(git log -1 --pretty=%B 2>/dev/null || echo "")"
+    else
+        commit_msg=""
+    fi
+else
+    commit_msg="$(grep -v '^#' "$commit_msg_file" | head -n 1 || true)"
+fi
+
+if [[ ! "$commit_msg" =~ ^(feat|fix|test|style|docs|chore|perf|refactor)(\(.+\))?:[[:space:]]+(.+) ]]; then
+    echo "    Error: Invalid commit message format." >&2
+    echo "    Format must be: type(scope): description or type: description" >&2
+    echo "    Valid types: feat, fix, test, style, docs, chore, perf, refactor" >&2
+    exit 1
+fi
