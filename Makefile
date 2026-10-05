@@ -9,6 +9,7 @@ DEBUG_NAME		:= debug_$(NAME)
 ASAN_NAME		:= asan_$(NAME)
 SRC_DIR			:= srcs
 INC_DIR			:= include
+TEST_DIR		:= tests
 BUILD_DIR		:= build
 
 DOCTEST_DIR		:= include/external/
@@ -18,7 +19,9 @@ DOCTEST_URL		:= https://raw.githubusercontent.com/doctest/doctest/master/doctest
 HEADERS			= $(shell find $(INC_DIR) -name "*.hpp" 2>/dev/null)
 SRCS			= $(shell find $(SRC_DIR) -name "*.cpp" 2>/dev/null)
 OBJS			= $(SRCS:$(SRC_DIR)/%.cpp=$(BUILD_DIR)/%.o)
-TEST_OBJS		= $(patsubst $(SRC_DIR)/%.cpp,$(BUILD_DIR)/test_%.o,$(SRCS))
+TEST_SRCS		= $(shell find $(TEST_DIR) -name "*.cpp" 2>/dev/null)
+TEST_OBJS		= $(patsubst $(SRC_DIR)/%.cpp,$(BUILD_DIR)/test_%.o,$(SRCS)) \
+			  $(patsubst $(TEST_DIR)/%.cpp,$(BUILD_DIR)/tests/test_%.o,$(TEST_SRCS))
 DEBUG_OBJS		= $(patsubst $(SRC_DIR)/%.cpp,$(BUILD_DIR)/debug_%.o,$(SRCS))
 ASAN_OBJS		= $(patsubst $(SRC_DIR)/%.cpp,$(BUILD_DIR)/asan_%.o,$(SRCS))
 
@@ -92,6 +95,12 @@ $(TEST_NAME): $(TEST_OBJS)
 	echo "$(GRAY)File compiled:$(RESET)	./$(TEST_NAME)"
 
 $(BUILD_DIR)/test_%.o: $(SRC_DIR)/%.cpp
+	@\
+	mkdir -p $(dir $@) &&\
+	$(CC) $(TEST_FLAGS) $(INCLUDES) -c $< -o $@ &&\
+	echo "$(GRAY)Obj. compiled:	$<$(RESET)"
+
+$(BUILD_DIR)/tests/test_%.o: $(TEST_DIR)/%.cpp
 	@\
 	mkdir -p $(dir $@) &&\
 	$(CC) $(TEST_FLAGS) $(INCLUDES) -c $< -o $@ &&\
