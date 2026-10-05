@@ -1,3 +1,4 @@
+#include "factorial.hpp"
 #include "header.hpp"
 
 #ifndef TESTING
@@ -8,11 +9,18 @@ int main()
     Harl::warning("level  3");
     Harl::error("level  4");
 
+    std::cout << "Factorial examples:\n";
+    std::cout << "5! = " << factorial(5) << "\n";
+    std::cout << "7! = " << factorial(7) << "\n";
+
     std::cout << "end of main()\n";
     return (EXIT_SUCCESS);
 }
 
-#else  // TESTING
+#else // TESTING
+# define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
+# include "doctest.h"
+
 TEST_CASE("main(): placeholder")
 {
     CHECK(true == true);
